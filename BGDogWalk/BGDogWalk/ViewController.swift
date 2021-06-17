@@ -84,7 +84,7 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         guard let walk = currentDog.walks?[indexPath.row] as? Walk,
-            let date = walk.date as? Date else {
+            let date = walk.date else {
                 return cell
         }
         cell.textLabel?.text = dateFormatter.string(from: date)
@@ -93,5 +93,27 @@ extension ViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return "List of Walks"
+    }
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard currentDog.walks?.count ?? 0 > indexPath.row,
+            let walkToRemove = currentDog.walks?[indexPath.row] as? Walk,
+            editingStyle == .delete else{
+                return
+        }
+
+        managedContext.delete(walkToRemove)
+
+        do {
+            try managedContext.save()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        } catch {
+            print(error.localizedDescription)
+        }
+
     }
 }
