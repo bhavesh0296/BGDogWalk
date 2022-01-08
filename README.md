@@ -43,5 +43,5 @@ class CoreDataStack {
 ## App Preview
 
 <kbd>
-<img src="Screenshots/BMIDogWalk.gif" alt="Home" width="250" /> 
+<img src="Screenshot/BGDogWalk.gif" alt="Home" width="250" /> 
 </kbd>
